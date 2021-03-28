@@ -15,7 +15,7 @@ An Android Application which reads weather information of user given city around
 * implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 * implementation 'com.google.code.gson:gson:2.8.6'<br><br>
 
-#### Screenshots:
+#### Outputs:
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![1](https://user-images.githubusercontent.com/37416018/105637984-7f617500-5e9a-11eb-8749-eae2b7f00f14.JPG)
 - - - -
