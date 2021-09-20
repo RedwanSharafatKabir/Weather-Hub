@@ -1,4 +1,4 @@
-## Weather-App_using_REST-API_and_Retrofit2
+## Weather-Hub
 An Android Application which reads weather information of user given city around the world.
 #### We took the API key from https://openweathermap.org/
 #### API Call sample: api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
