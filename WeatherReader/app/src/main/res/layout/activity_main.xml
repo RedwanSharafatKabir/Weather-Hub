@@ -1,147 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.viewpager.widget.ViewPager
+    android:id="@+id/bakgroundViewPagerLayoutId"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/nature_wallpaper"
+    tools:context=".AppAction.MainActivity"
     android:orientation="vertical">
+<!--    android:id="@+id/linearLayoutId">-->
+    
+<!--    <com.google.android.material.appbar.AppBarLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:paddingTop="60dp"
-        android:background="#61040404"
-        android:text="@string/app_name"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:textSize="30sp"
-        android:fontFamily="serif"/>
+<!--        <com.google.android.material.tabs.TabLayout-->
+<!--            android:id="@+id/tabs"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:tabMode="fixed"-->
+<!--            app:tabGravity="fill"-->
+<!--            android:background="@color/colorPrimaryDark"/>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingRight="5dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
-        android:weightSum="9"
-        android:gravity="center"
-        android:background="#61040404">
+<!--    </com.google.android.material.appbar.AppBarLayout>-->
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="7"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:hint=" search city"
-            app:hintTextColor="#ffffff">
+<!--    <androidx.viewpager.widget.ViewPager-->
+<!--        android:id="@+id/bakgroundViewPagerLayoutId"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/searchId"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:paddingTop="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="10dp"
-                android:drawableLeft="@drawable/ic_baseline_search_24"
-                android:layout_marginRight="5dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/enterId"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:src="@drawable/send_icon_foreground"
-            android:layout_weight="1.5"
-            android:clickable="true"
-            android:onClick="enterPlaceName"/>
-
-    </LinearLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#61040404"
-        android:paddingLeft="20dp"
-        android:paddingTop="30dp"
-        android:paddingRight="20dp"
-        android:paddingBottom="10dp">
-        <LinearLayout
-            android:id="@+id/linearLayoutId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="20dp"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/placeNameId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:textColor="#fff"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="10dp"/>
-
-            <TextView
-                android:id="@+id/temperatureId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:textColor="#fff"
-                android:textSize="23sp" />
-
-            <TextView
-                android:id="@+id/feelsLikeId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/pressureId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/humidityId"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="sans-serif"
-                android:textColor="#fff"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#61040404"/>
-
-</LinearLayout>
+</androidx.viewpager.widget.ViewPager>
