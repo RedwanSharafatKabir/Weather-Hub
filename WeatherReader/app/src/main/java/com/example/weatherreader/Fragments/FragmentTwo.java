@@ -15,29 +15,23 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.example.weatherreader.ModelClasses.WeatherResult;
 import com.example.weatherreader.R;
-import com.example.weatherreader.Retrofit.ApiClient;
+import com.example.weatherreader.Retrofit.Common;
+import com.example.weatherreader.Retrofit.RetrofitClient;
 import com.example.weatherreader.Retrofit.RetrofitInterface;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -47,9 +41,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class FragmentTwo extends Fragment {
 
@@ -60,6 +63,7 @@ public class FragmentTwo extends Fragment {
     TextView temperatureC, pressure, humidity, time, date, wind, sunrise, sunset, geoCoord, maxTemp, minTemp;
     private FusedLocationProviderClient fusedLocationProviderClient;
     String currentDate, currentTime, latitude = "", longitude = "", currentPlace;
+    CompositeDisposable compositeDisposable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,26 +84,6 @@ public class FragmentTwo extends Fragment {
         minTemp = views.findViewById(R.id.minTempId);
         geoCoord = views.findViewById(R.id.geoCoordId);
 
-//        Dexter.withContext(getContext())
-//                .withPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-//                        Manifest.permission.ACCESS_COARSE_LOCATION)
-//                .withListener(new PermissionListener() {
-//                    @Override
-//                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-//
-//                    }
-//                })
-
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
 
@@ -110,7 +94,7 @@ public class FragmentTwo extends Fragment {
         return views;
     }
 
-    private void refresh(int milliSecond){
+    private void refresh(int milliSecond) {
         final Handler handler = new Handler(Looper.getMainLooper());
 
         final Runnable runnable = new Runnable() {
@@ -166,6 +150,15 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onSuccess(Location location) {
                 if (location != null) {
+                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
+                            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                        return;
+                    }
+
+                    Common.CURRENT_LOCATION = fusedLocationProviderClient.getLastLocation();
+
                     latitude = String.valueOf(location.getLatitude());
                     longitude = String.valueOf(location.getLongitude());
 
@@ -200,47 +193,68 @@ public class FragmentTwo extends Fragment {
 
     }
 
+    public FragmentTwo(){
+        compositeDisposable = new CompositeDisposable();
+    }
+
     public void getWeatherData(String name){
-        RetrofitInterface retrofitInterface = ApiClient.getInstance().create(RetrofitInterface.class);
-        progressBar.setVisibility(View.GONE);
-//        Call<Example> call = retrofitInterface.getWeatherData(name);
-//        call.enqueue(new Callback<Example>() {
-//            @Override
-//            public void onResponse(Call<Example> call, Response<Example> response) {
-//                try {
-//                    String kelvin = response.body().getMain().getTemp();
-//                    celsius = Double.parseDouble(kelvin) - 273.15;
-//                    BigDecimal bd = new BigDecimal(celsius).setScale(2, RoundingMode.HALF_UP);
-//                    double newInput = bd.doubleValue();
-//
-//                    temperatureC.setText(currentPlace + newInput + "° celsius");
-//                    temperatureK.setText(response.body().getMain().getTemp() + "° kelvin");
-//                    pressure.setText("Pressure in PSI: " + response.body().getMain().getPressure() + " inHg");
-//                    humidity.setText("Humidity: " + response.body().getMain().getHumidity());
-//
-//                    progressBar.setVisibility(View.GONE);
-//
-//                } catch (Exception e){
-//                    progressBar.setVisibility(View.GONE);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Example> call, Throwable t) {
-//                snackbar = Snackbar.make(parentLayout, "Turn on internet connection", Snackbar.LENGTH_LONG);
-//                View sbView = snackbar.getView();
-//                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red));
-//                snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-//                snackbar.setDuration(10000).show();
-//
-//                progressBar.setVisibility(View.GONE);
-//
-//                place.setText("");
-//                temperatureK.setText("");
-//                temperatureC.setText("");
-//                pressure.setText("");
-//                humidity.setText("");
-//            }
-//        });
+        RetrofitInterface retrofitInterface = RetrofitClient.getInstance().create(RetrofitInterface.class);
+        compositeDisposable.add(retrofitInterface.getWeatherLatLng(latitude, longitude, Common.APP_ID, "metric")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<WeatherResult>() {
+                    @Override
+                    public void accept(WeatherResult weatherResult) throws Exception {
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity(), ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+        );
+        
+/*
+        Call<Example> call = retrofitInterface.getWeatherData(name);
+        call.enqueue(new Callback<Example>() {
+            @Override
+            public void onResponse(Call<Example> call, Response<Example> response) {
+                try {
+                    String kelvin = response.body().getMain().getTemp();
+                    celsius = Double.parseDouble(kelvin) - 273.15;
+                    BigDecimal bd = new BigDecimal(celsius).setScale(2, RoundingMode.HALF_UP);
+                    double newInput = bd.doubleValue();
+
+                    temperatureC.setText(currentPlace + newInput + "° celsius");
+                    temperatureK.setText(response.body().getMain().getTemp() + "° kelvin");
+                    pressure.setText("Pressure in PSI: " + response.body().getMain().getPressure() + " inHg");
+                    humidity.setText("Humidity: " + response.body().getMain().getHumidity());
+
+                    progressBar.setVisibility(View.GONE);
+
+                } catch (Exception e){
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Example> call, Throwable t) {
+                snackbar = Snackbar.make(parentLayout, "Turn on internet connection", Snackbar.LENGTH_LONG);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red));
+                snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+                snackbar.setDuration(10000).show();
+
+                progressBar.setVisibility(View.GONE);
+
+                place.setText("");
+                temperatureK.setText("");
+                temperatureC.setText("");
+                pressure.setText("");
+                humidity.setText("");
+            }
+        });
+*/
     }
 }
