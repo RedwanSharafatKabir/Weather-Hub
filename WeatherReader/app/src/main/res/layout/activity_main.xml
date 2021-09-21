@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     tools:context=".AppAction.MainActivity"
     android:orientation="vertical">
+
 <!--    android:id="@+id/linearLayoutId">-->
     
 <!--    <com.google.android.material.appbar.AppBarLayout-->
