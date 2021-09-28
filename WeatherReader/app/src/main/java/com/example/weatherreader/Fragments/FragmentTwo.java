@@ -1,10 +1,14 @@
 package com.example.weatherreader.Fragments;
 
 import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,10 +19,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.weatherreader.AppAction.MainActivity;
+import com.example.weatherreader.BackPageInterface.BackListenerFragment;
 import com.example.weatherreader.ModelClasses.WeatherResult;
 import com.example.weatherreader.R;
 import com.example.weatherreader.Retrofit.Common;
@@ -48,12 +55,16 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class FragmentTwo extends Fragment {
+public class FragmentTwo extends Fragment implements View.OnClickListener, BackListenerFragment {
 
-    Snackbar snackbar;
-    View views, parentLayout;
+    View views;
     ProgressBar progressBar;
-    TextView temperatureC, pressure, humidity, time, date, wind, sunrise, sunset, geoCoord, maxTemp, minTemp;
+    private Snackbar snackbar;
+    private ConnectivityManager cm;
+    private NetworkInfo netInfo;
+    public static BackListenerFragment backBtnListener;
+    TextView temperatureC, pressure, humidity, time, date, wind, sunrise, sunset;
+    TextView geoCoord, maxTemp, minTemp, priorTenDays, nextTenDays;
     private FusedLocationProviderClient fusedLocationProviderClient;
     String currentDate, currentTime, latitude = "", longitude = "", currentPlace;
     CompositeDisposable compositeDisposable;
@@ -62,7 +73,8 @@ public class FragmentTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         views = inflater.inflate(R.layout.fragment_fragment_two, container, false);
 
-        parentLayout = views.findViewById(android.R.id.content);
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        netInfo = cm.getActiveNetworkInfo();
         progressBar = views.findViewById(R.id.progressBarId);
 
         time = views.findViewById(R.id.timeId);
@@ -77,14 +89,45 @@ public class FragmentTwo extends Fragment {
         minTemp = views.findViewById(R.id.minTempId);
         geoCoord = views.findViewById(R.id.geoCoordId);
 
+        priorTenDays = views.findViewById(R.id.priorTenDaysId);
+        priorTenDays.setOnClickListener(this);
+        nextTenDays = views.findViewById(R.id.nextTenDaysId);
+        nextTenDays.setOnClickListener(this);
+
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
-        requestLocation();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            requestLocation();
+
+        } else {
+            snackbar = Snackbar.make(views, "Turn on internet connection", Snackbar.LENGTH_LONG);
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red));
+            snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+            snackbar.setDuration(10000).show();
+
+            progressBar.setVisibility(View.GONE);
+        }
 
         return views;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.nextTenDaysId:
+                ((MainActivity) getActivity()).viewPager2.setCurrentItem(2);
+
+                break;
+
+            case R.id.priorTenDaysId:
+                ((MainActivity) getActivity()).viewPager2.setCurrentItem(0);
+
+                break;
+        }
     }
 
     private void requestLocation() {
@@ -241,5 +284,45 @@ public class FragmentTwo extends Fragment {
             }
         });
  */
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        backBtnListener = this;
+    }
+
+    @Override
+    public void onPause() {
+        backBtnListener = null;
+        super.onPause();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog.Builder alertDialogBuilder;
+        alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        alertDialogBuilder.setTitle("EXIT !");
+        alertDialogBuilder.setMessage("Are you sure you want to close this app ?");
+        alertDialogBuilder.setIcon(R.drawable.exit);
+        alertDialogBuilder.setCancelable(false);
+
+        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+                getActivity().finishAffinity();
+            }
+        });
+
+        alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

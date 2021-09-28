@@ -8,8 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Common {
-    // Id of previous account
-//    public static final String APP_ID = "372c08b8e0c21f52d218a9699b8da4c7";
     public static final String APP_ID = "a8d0ea13948b5cf59bcfc02e1b0f3a05";
     public static Task<Location> CURRENT_LOCATION = null;
 

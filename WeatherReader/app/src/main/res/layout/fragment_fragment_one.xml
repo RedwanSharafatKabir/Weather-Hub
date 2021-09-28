@@ -1,17 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragments.FragmentOne"
-    android:background="#DDDD2E">
+    android:background="@drawable/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"
+        android:weightSum="55"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="15"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center|left"
+            android:background="@android:color/transparent"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="25"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif"
+            android:text="Prior 10 Days"/>
+
+        <TextView
+            android:id="@+id/todayId"
+            android:layout_width="0dp"
+            android:layout_weight="15"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center|right"
+            android:background="@android:color/transparent"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif"
+            android:text="Today"
+            android:drawableRight="@drawable/ic_baseline_keyboard_arrow_right_24"/>
+
+    </LinearLayout>
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Fragment One"
-        android:layout_gravity="center"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="70dp"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif"
+        android:text="10 Days Weather Forecasting"
+        android:inputType="textMultiLine"/>
 
-</LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>
