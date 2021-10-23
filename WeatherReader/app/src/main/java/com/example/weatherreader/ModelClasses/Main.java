@@ -7,12 +7,12 @@ public class Main {
     private double feels_like;
     private double temp_min ;
     private double temp_max;
-    private int pressure;
+    private float pressure;
     private int humidity;
     private int sea_level;
     private int grnd_level;
 
-    public Main(double temp, double feels_like, double temp_min, double temp_max, int pressure, int humidity, int sea_level, int grnd_level) {
+    public Main(double temp, double feels_like, double temp_min, double temp_max, float pressure, int humidity, int sea_level, int grnd_level) {
         this.temp = temp;
         this.feels_like = feels_like;
         this.temp_min = temp_min;
@@ -58,11 +58,11 @@ public class Main {
         this.temp_max = temp_max;
     }
 
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
-    public void setPressure(int pressure) {
+    public void setPressure(float pressure) {
         this.pressure = pressure;
     }
 

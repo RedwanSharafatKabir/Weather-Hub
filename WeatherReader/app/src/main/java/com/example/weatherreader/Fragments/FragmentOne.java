@@ -34,7 +34,7 @@ public class FragmentOne extends Fragment implements BackListenerFragment, View.
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.todayId:
-                ((MainActivity) getActivity()).viewPager2.setCurrentItem(1);
+                ((MainActivity) getActivity()).viewPager2.setCurrentItem(0);
 
                 break;
         }
@@ -54,6 +54,6 @@ public class FragmentOne extends Fragment implements BackListenerFragment, View.
 
     @Override
     public void onBackPressed() {
-        ((MainActivity) getActivity()).viewPager2.setCurrentItem(1);
+        ((MainActivity) getActivity()).viewPager2.setCurrentItem(0);
     }
 }

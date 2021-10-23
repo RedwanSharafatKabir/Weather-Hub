@@ -23,15 +23,15 @@ public class CustomerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         Fragment fragment = null;
 
-        if(position==0){
-            fragment = new FragmentOne();
-        }
+//        if(position==0){
+//            fragment = new FragmentOne();
+//        }
 
-        if(position==1){
+        if(position==0){
             fragment = new FragmentTwo();
         }
 
-        if(position==2){
+        if(position==1){
             fragment = new FragmentThree();
         }
         return fragment;
@@ -40,6 +40,6 @@ public class CustomerAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 3;
+        return 2;
     }
 }

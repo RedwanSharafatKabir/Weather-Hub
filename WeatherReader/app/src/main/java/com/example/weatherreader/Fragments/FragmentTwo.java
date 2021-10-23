@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -14,7 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,10 +68,11 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
     private NetworkInfo netInfo;
     public static BackListenerFragment backBtnListener;
     TextView temperatureC, pressure, humidity, time, date, wind, sunrise, sunset;
-    TextView geoCoord, maxTemp, minTemp, priorTenDays, nextTenDays;
-    private FusedLocationProviderClient fusedLocationProviderClient;
-    String currentDate, currentTime, latitude = "", longitude = "", currentPlace;
+    TextView maxTemp, minTemp, nextTenDays;
+    String currentDate="", currentTime="", cityValue="";
     CompositeDisposable compositeDisposable;
+    private Spinner citySpinner;
+    String city[];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,20 +92,19 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
         sunset = views.findViewById(R.id.sunsetId);
         maxTemp = views.findViewById(R.id.maxTempId);
         minTemp = views.findViewById(R.id.minTempId);
-        geoCoord = views.findViewById(R.id.geoCoordId);
 
-        priorTenDays = views.findViewById(R.id.priorTenDaysId);
-        priorTenDays.setOnClickListener(this);
         nextTenDays = views.findViewById(R.id.nextTenDaysId);
         nextTenDays.setOnClickListener(this);
 
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
+        city = getResources().getStringArray(R.array.city_array);
+        citySpinner = views.findViewById(R.id.citySpinnerId);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.city_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        citySpinner.setAdapter(adapter);
 
         if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            requestLocation();
+            getWeatherData(cityMethod());
 
         } else {
             snackbar = Snackbar.make(views, "Turn on internet connection", Snackbar.LENGTH_LONG);
@@ -119,33 +123,35 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.nextTenDaysId:
-                ((MainActivity) getActivity()).viewPager2.setCurrentItem(2);
-
-                break;
-
-            case R.id.priorTenDaysId:
-                ((MainActivity) getActivity()).viewPager2.setCurrentItem(0);
+                ((MainActivity) getActivity()).viewPager2.setCurrentItem(1);
 
                 break;
         }
     }
 
-    private void requestLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+    private String cityMethod(){
+        citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                cityValue = city[position];
 
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION}, PackageManager.PERMISSION_GRANTED);
+                getWeatherData(cityMethod());
 
-            getCurrentLocation();
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                ((TextView) parent.getChildAt(0)).setTextSize(18);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
 
-        } else {
-            getCurrentLocation();
-        }
+        return cityValue.toLowerCase();
     }
 
-    private void getCurrentLocation() {
+    public FragmentTwo(){
+        compositeDisposable = new CompositeDisposable();
+    }
+
+    public void getWeatherData(String cityValue){
         Date cal = Calendar.getInstance().getTime();
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd-MMM-yyyy");
         currentDate = simpleDateFormat1.format(cal);
@@ -153,80 +159,20 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
         SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("hh:mm:ss aaa");
         currentTime = simpleDateFormat2.format(new Date());
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        time.setText(" " + currentTime);
+        date.setText(" " + currentDate);
 
-            requestLocation();
-        }
-
-        fusedLocationProviderClient.getLastLocation().addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), "Location permission denied !", Toast.LENGTH_LONG).show();
-            }
-
-        }).addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),
-                            Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-                        return;
-                    }
-
-                    Common.CURRENT_LOCATION = fusedLocationProviderClient.getLastLocation();
-
-                    latitude = String.valueOf(location.getLatitude());
-                    longitude = String.valueOf(location.getLongitude());
-
-                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                    List<Address> addressList;
-
-                    try {
-                        addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                        currentPlace = addressList.get(0).getLocality();
-
-                        getWeatherData(currentPlace);
-
-                        time.setText(" " + currentTime);
-                        date.setText(" " + currentDate);
-
-                        BigDecimal v1 = new BigDecimal(latitude).setScale(2, RoundingMode.HALF_UP);
-                        BigDecimal v2 = new BigDecimal(longitude).setScale(2, RoundingMode.HALF_UP);
-                        double newInput1 = v1.doubleValue();
-                        double newInput2 = v2.doubleValue();
-
-                        geoCoord.setText("Location: [" + newInput1 + "]" + ", [" + newInput2 + "]");
-
-                    } catch (IOException e) {
-                        Log.i("ERROR ", "Permission Denied");
-                        Toast.makeText(getActivity(), "Location permission denied !", Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            }
-        });
-
-    }
-
-    public FragmentTwo(){
-        compositeDisposable = new CompositeDisposable();
-    }
-
-    public void getWeatherData(String name){
         RetrofitInterface retrofitInterface = RetrofitClient.getInstance().create(RetrofitInterface.class);
 
-        compositeDisposable.add(retrofitInterface.getWeatherLatLng(latitude, longitude, Common.APP_ID, "metric")
+        // GET Weather Information by City name
+        compositeDisposable.add(retrofitInterface.getWeatherByCity(cityValue, Common.APP_ID, "metric")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<WeatherResult>() {
                     @Override
                     public void accept(WeatherResult weatherResult) throws Exception {
-                        temperatureC.setText(name + ", " + weatherResult.getMain().getTemp() + "° C");
+
+                        temperatureC.setText(cityValue + ", " + weatherResult.getMain().getTemp() + "° C");
                         maxTemp.setText("Highest temp: " + weatherResult.getMain().getTemp_max() + "° C");
                         minTemp.setText("Lowest temp: " + weatherResult.getMain().getTemp_min() + "° C");
                         pressure.setText("Pressure: " + weatherResult.getMain().getPressure());
@@ -234,7 +180,6 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
                         wind.setText("Wind speed: " + weatherResult.getWind().getSpeed() + ", Deg: " + weatherResult.getWind().getDeg());
                         sunrise.setText("Sunrise: " + Common.convertUnixToHour(weatherResult.getSys().getSunrise()));
                         sunset.setText("Sunset: " + Common.convertUnixToHour(weatherResult.getSys().getSunset()));
-                        sunset.setText("Sunset: " + Common.convertUnixToHour(1645896325));
 
                         progressBar.setVisibility(View.GONE);
                     }
@@ -242,48 +187,23 @@ public class FragmentTwo extends Fragment implements View.OnClickListener, BackL
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Log.i("Error ", throwable.getMessage());
+                        Log.i("Error_Response ", throwable.getMessage());
                         progressBar.setVisibility(View.GONE);
                     }
                 })
         );
+    }
 
-/*
-        Call<WeatherResult> call = (Call<WeatherResult>) retrofitInterface.getWeatherLatLng(latitude, longitude, Common.APP_ID, "metric");
-        call.enqueue(new Callback<WeatherResult>() {
-            @Override
-            public void onResponse(Call<WeatherResult> call, Response<WeatherResult> response) {
-                try {
-                    String kelvin = String.valueOf(response.body().getMain().getTemp());
-                    double celsius = Double.parseDouble(kelvin) - 273.15;
+    @Override
+    public void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
+    }
 
-                    BigDecimal bd = new BigDecimal(celsius).setScale(2, RoundingMode.HALF_UP);
-                    double newInput = bd.doubleValue();
-                    temperatureC.setText(currentPlace + newInput + "° celsius");
-
-                    pressure.setText("Pressure in PSI: " + response.body().getMain().getPressure() + " inHg");
-                    humidity.setText("Humidity: " + response.body().getMain().getHumidity());
-                    maxTemp.setText("Highest temp: " + response.body().getMain().getTemp_max() + "° C");
-                    minTemp.setText("Lowest temp: " + response.body().getMain().getTemp_min() + "° C");
-
-                    progressBar.setVisibility(View.GONE);
-
-                } catch (Exception e){
-                    progressBar.setVisibility(View.GONE);
-                }
-            }
-            @Override
-            public void onFailure(Call<WeatherResult> call, Throwable t) {
-                snackbar = Snackbar.make(parentLayout, "Turn on internet connection", Snackbar.LENGTH_LONG);
-                View sbView = snackbar.getView();
-                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.Red));
-                snackbar.setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-                snackbar.setDuration(10000).show();
-                progressBar.setVisibility(View.GONE);
-
-            }
-        });
- */
+    @Override
+    public void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
     }
 
     @Override

@@ -44,14 +44,14 @@ public class MainActivity extends AppCompatActivity {
         CustomerAdapter customerAdapter = new CustomerAdapter(this);
         viewPager2.setAdapter(customerAdapter);
 
-        viewPager2.setCurrentItem(1);
+        viewPager2.setCurrentItem(0);
     }
 
     @Override
     public void onBackPressed() {
-        if (FragmentOne.backBtnListener!=null){
-            FragmentOne.backBtnListener.onBackPressed();
-        }
+//        if (FragmentOne.backBtnListener!=null){
+//            FragmentOne.backBtnListener.onBackPressed();
+//        }
 
         if(FragmentTwo.backBtnListener!=null){
             FragmentTwo.backBtnListener.onBackPressed();

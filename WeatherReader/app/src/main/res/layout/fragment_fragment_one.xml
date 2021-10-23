@@ -40,8 +40,7 @@
             android:textColor="#fff"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:fontFamily="sans-serif"
-            android:text="Prior 10 Days"/>
+            android:fontFamily="sans-serif"/>
 
         <TextView
             android:id="@+id/todayId"
@@ -60,33 +59,54 @@
 
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:layout_marginTop="70dp"
-        android:gravity="center"
-        android:background="@android:color/transparent"
-        android:textColor="#fff"
-        android:textStyle="bold"
-        android:textSize="22sp"
-        android:fontFamily="sans-serif"
-        android:text="10 Days Weather Forecasting"
-        android:inputType="textMultiLine"/>
+        android:orientation="vertical"
+        android:layout_marginTop="55dp"
+        android:layout_gravity="center|top">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="120dp">
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:textColor="#fff"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:text="Historical Weather Data"
+            android:inputType="textMultiLine"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@android:color/transparent"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif"
+            android:text="(Previous 5 Days)"
+            android:inputType="textMultiLine"/>
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/historicalRecyclerViewId"
+        android:layout_gravity="center|top"
+        android:layout_marginTop="115dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"/>
+
+    <ProgressBar
+        android:layout_width="30dp"
+        android:id="@+id/historyProgressId"
+        android:layout_height="30dp"
+        android:layout_gravity="center"/>
 
 </FrameLayout>

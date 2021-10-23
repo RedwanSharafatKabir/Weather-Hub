@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Weather Hub</string>
+
+    <string-array name="city_array">
+        <item>Dhaka</item>
+        <item>Barishal</item>
+        <item>Chittagong</item>
+        <item>Mymensingh</item>
+        <item>Khulna</item>
+        <item>Rajshahi</item>
+        <item>Rangpur</item>
+        <item>Sylhet</item>
+    </string-array>
+
 </resources>
