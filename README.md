@@ -18,13 +18,14 @@ An Android Application which reads weather information of user given city around
 #### Outputs:
 
 * Weather data of Dhaka city - 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![temp](https://user-images.githubusercontent.com/37416018/148210316-d0e0be4e-70b9-4058-9cf1-968cc13879ce.jpg)
+
+![temp](https://user-images.githubusercontent.com/37416018/148210316-d0e0be4e-70b9-4058-9cf1-968cc13879ce.jpg)
 - - - -
 <br>
 
 * Weather forecast of 5 days 3 hours interval - 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![forecast](https://user-images.githubusercontent.com/37416018/148210323-3875f11e-73c8-48da-8dc7-1dada13d168f.jpg)
+![forecast](https://user-images.githubusercontent.com/37416018/148210725-edea627a-21bf-4c8c-ac89-9a89ed0e0cb3.jpg)
 - - - -
 <br>
 
