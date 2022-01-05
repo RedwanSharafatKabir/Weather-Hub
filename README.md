@@ -17,14 +17,14 @@ An Android Application which reads weather information of user given city around
 
 #### Outputs:
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![1](https://user-images.githubusercontent.com/37416018/105637984-7f617500-5e9a-11eb-8749-eae2b7f00f14.JPG)
+* Weather data of Dhaka city - 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![temp](https://user-images.githubusercontent.com/37416018/148210316-d0e0be4e-70b9-4058-9cf1-968cc13879ce.jpg)
 - - - -
 <br>
 
-* Weather data of Dhaka and London city - 
+* Weather forecast of 5 days 3 hours interval - 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![2](https://user-images.githubusercontent.com/37416018/105637987-81c3cf00-5e9a-11eb-9e1b-951c9fa30d34.JPG)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![3](https://user-images.githubusercontent.com/37416018/105637990-838d9280-5e9a-11eb-9673-b40b40e7161a.JPG)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    ![forecast](https://user-images.githubusercontent.com/37416018/148210323-3875f11e-73c8-48da-8dc7-1dada13d168f.jpg)
 - - - -
 <br>
 
